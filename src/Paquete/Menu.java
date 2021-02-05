@@ -16,6 +16,7 @@ public class Menu {
 		System.out.println("1. Acelerar");
 		System.out.println("2. Frenar");
 		System.out.println("3. Rearrancar");
+		System.out.println("*************");
 		System.out.println();
 		opcJuego = leer.nextInt();
 		

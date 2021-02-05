@@ -11,9 +11,10 @@ public class Coche {
 	private int potencia;
 	private int velocidad;
 	private int kmRecorridos;
+	private boolean maquina;
 	
 	
-	public Coche(String nombrePiloto, int dorsal) {
+	public Coche(String nombrePiloto, int dorsal, boolean maquina) {
 		
 		this.nombrePiloto = nombrePiloto;
 		this.dorsal = dorsal;
@@ -22,6 +23,7 @@ public class Coche {
 		this.potencia = 50;
 		this.velocidad = 0;
 		this.kmRecorridos = 0;
+		this.maquina = maquina;
 	}
 
 	
@@ -42,6 +44,9 @@ public class Coche {
 		this.velocidad += acelerar;
 		this.kmRecorridos += acelerar;
 		
+		System.out.println("El Coche ha Acelerado: " + acelerar + " Y la Velocidad Actual es de: " + velocidad);
+		System.out.println("");
+		
 		if (this.velocidad >= 200) {
 			
 			System.out.println("El Coche ha Superado los 200 Km/h y se ha Accidentado");
@@ -60,22 +65,30 @@ public class Coche {
 		
 		this.velocidad -= frenar;
 		this.kmRecorridos += frenar;
+		
+		if (velocidad <= 0) {
+			System.out.println("La Velocidad es 0, Imposible Frenar Más");
+			this.velocidad = 0;
+		}
+		
+		System.out.println("El Coche ha Frenado: " + frenar + " Y la Velocidad Actual es de: " + velocidad);
+		System.out.println("");
 	}
 	
 	
 	public void rearrancarCoche() {
 		
-		for (int i = 0; i < vCoches[i]; i++) {
-			if ((this.estadoCoche.equalsIgnoreCase("Accidentado")) && (vCoches[i].getEstado!="Termiando")) {
+		if (this.estadoCoche.equalsIgnoreCase("Accidentado")) {
 				
-				this.estadoCoche = "Marcha";
-				this.velocidad = 0;
-				System.out.println("El Coche se ha Reincorporado a la Carrera");
+			this.estadoCoche = "Marcha";
+			this.velocidad = 0;
+			System.out.println("El Coche se ha Reincorporado a la Carrera");
 				
+			}else {
+				System.out.println("El Coche ya Estaba en Marcha, Imposible de Rearrancar");
 			}
+				
 		}
-		
-	}
 	
 	
 	public void terminarCoche() {
@@ -144,5 +157,16 @@ public class Coche {
 	public void setKmRecorridos(int kmRecorridos) {
 		this.kmRecorridos = kmRecorridos;
 	}
+
+
+	public boolean isMaquina() {
+		return maquina;
+	}
+
+
+	public void setMaquina(boolean maquina) {
+		this.maquina = maquina;
+	}
+	
 	
 }

@@ -25,6 +25,7 @@ public class Carrera {
 		
 		String nombrePiloto = "";
 		int dorsal = 0;
+		boolean maquina = false;
 		
 		
 		System.out.println("Introduce el Nombre del Piloto");
@@ -33,8 +34,9 @@ public class Carrera {
 		System.out.println("Introduce el Dorsal del Piloto");
 		dorsal = leer.nextInt();
 		
+		comprobarDorsal(dorsal);
 		
-		Coche coche = new Coche(nombrePiloto, dorsal);
+		Coche coche = new Coche(nombrePiloto, dorsal, maquina);
 
 		
 		for (int i = 0; i < vCoches.length; i++) {
@@ -43,6 +45,7 @@ public class Carrera {
 				break;
 			}
 		}
+		
 		
 	}
 	
@@ -64,16 +67,68 @@ public class Carrera {
 		for (int i = 0; i < vCoches.length; i++) {
 			if (vCoches[i] != null) {
 			vCoches[i].arrancarCoche();
+			break;
 			}
 		}	
 		
 	}
 	
 	
+	public void mostrarCochesCompitiendo() {
+		int numCochesH = 0;
+		int numCochesM = 0;
+
+		for (int i = 0; i < 1; i++) {
+			if (vCoches[i] != null) {
+				numCochesH++;
+			}else {
+				numCochesM++;
+			}
+			
+			System.out.println("Estan Participando en Esta Carrera: " + numCochesH + " Coches Humanos" 
+			+ " Y: " + numCochesM + " Coches Maquina");
+		}
+	}
+
+	public void mostrarCochesMarcha() {
+		int numCochesMarchaH = 0;
+		int numCochesMarchaM = 0;
+
+		for (int i = 0; i < 1; i++) {
+			if (vCoches[i].getEstadoCoche().equalsIgnoreCase("Marcha")) {
+				numCochesMarchaH++;
+			}else {
+				numCochesMarchaM++;
+			}
+			
+			System.out.println("Quedan: " + numCochesMarchaH + " Coches Humanos en Marcha en la Carrera"
+			+ " Y: " + numCochesMarchaM + " Coches Maquina en Marcha");
+		}
+	}
+
+	public void mostrarCochesTerminado() {
+		int numCochesTerminadoH = 0;
+		int numCochesTerminadoM = 0;
+
+		for (int i = 0; i < 1; i++) {
+			if (vCoches[i].getEstadoCoche().equalsIgnoreCase("Terminado")) {
+				numCochesTerminadoH++;
+			}else {
+				numCochesTerminadoM++;
+			}
+			
+			System.out.println("Actualmente hay: " + numCochesTerminadoH + " Coches Humanos que han Terminado la Carrera" 
+			+ " Y: " + numCochesTerminadoM + " Coches Maquina que han Terminado");
+		}
+	}
+	
+	
 	public void jugar() {
 		
 		Scanner leer = new Scanner(System.in);
+		Random r = new Random();
 		int opcJuego = 0; 
+		int opcMaquina = 0;
 		
 		Coche c;
 		
@@ -82,63 +137,72 @@ public class Carrera {
 			for (int i = 0; i < vCoches.length; i++) {
 				if (vCoches[i] != null) {
 					c = vCoches[i];
-					opcJuego = Menu.pintaMenuJuego();
 					
-					switch (opcJuego) {
 					
-					case 1:
+					if (!c.isMaquina()) {
+						opcJuego = Menu.pintaMenuJuego();
 						
-						c.acelerarCoche();
-						
-						break;
+						switch (opcJuego) {
+						case 1:
+							c.acelerarCoche();
+							break;
 
-					case 2:
-						
-						c.frenarCoche();
-						
-						break;
+						case 2:
+							c.frenarCoche();
+							break;
 
-					case 3:
+						case 3:
+							c.rearrancarCoche();
+							break;
+						}
 						
-						c.rearrancarCoche();
 						
-						break;
+					}else {
+						if (c.getEstadoCoche().equalsIgnoreCase("Accidentado")) {
+							c.rearrancarCoche();
+							
+						}else {
+							opcMaquina = r.nextInt(2);
+							
+							switch (opcMaquina) {
+							case 0:
+								c.acelerarCoche();
+								break;
+
+							case 1:
+								c.frenarCoche();
+								break;
+							}
+						}
 					}
 				}
+				
 			}
 			
-		} while(carreraTerminada());
-		
+			mostrarCochesCompitiendo(); 
+			mostrarCochesMarcha(); 
+			mostrarCochesTerminado();
+			carreraTerminada();
+			
+		}while (carreraTerminada() != true);
 	}
-
-
+	
+	
 	private boolean carreraTerminada() {
 		
 		for (int i = 0; i < vCoches.length; i++) {
-			if ((vCoches[i].getEstadoCoche() == "Terminado") && (vCoches[i].getEstadoCoche() == "Accidentado")) {
+			if ((vCoches[i].getEstadoCoche() != "Marcha") && (vCoches[i].getEstadoCoche() != "Parado")) {
 				
 				System.out.println("La Carrera ha Terminado");
 				return true;
+				
+			}else {
+				System.out.println("La Carrera Sigue en Marcha, aun no ha Terminado");
 			}
+			break;
 		}
 		
 		return false;
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
